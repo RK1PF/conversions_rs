@@ -201,7 +201,7 @@ pub mod decimal_candle {
     /// Converts decimal candle to candela.
     /// # Arguments
     /// * `value` - The luminous intensity in decimal candle to convert
-    /// 
+    ///
     /// Note: 1 decimal candle = 1 candela (by definition)
     pub fn to_candela(value: f64) -> f64 {
         value
