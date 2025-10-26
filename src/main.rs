@@ -8,7 +8,7 @@ use std::io::{self, Write};
 #[derive(Parser)]
 #[command(name = "conversions_rs")]
 #[command(about = "A comprehensive unit conversion tool")]
-#[command(version = "1.1.0")]
+#[command(version = "1.2.0")]
 struct Args {
     #[command(subcommand)]
     command: Option<Commands>,

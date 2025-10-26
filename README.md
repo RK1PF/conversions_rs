@@ -39,7 +39,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-conversions_rs = "1.1.0"
+conversions_rs = "1.2.0"
 ```
 
 ## Features
