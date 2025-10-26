@@ -117,7 +117,7 @@ jobs:
     - name: Build WASM (nodejs target)
       run: wasm-pack build --target nodejs --out-dir pkg/nodejs --features wasm
 
-    - name: Build WASM (bundler target)  
+    - name: Build WASM (bundler target)
       run: wasm-pack build --target bundler --out-dir pkg/bundler --features wasm
 
     - name: Setup Node.js
