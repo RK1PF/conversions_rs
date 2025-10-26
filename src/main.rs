@@ -109,87 +109,69 @@ fn main() {
 
 fn handle_cli_command(command: Commands) {
     match command {
-        Commands::Length { value, from, to } => {
-            match convert_length(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        Commands::Length { value, from, to } => match convert_length(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Weight { value, from, to } => {
-            match convert_weight(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Weight { value, from, to } => match convert_weight(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Temperature { value, from, to } => {
-            match convert_temperature(value, &from, &to) {
-                Ok(result) => println!("{}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase()),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Temperature { value, from, to } => match convert_temperature(value, &from, &to) {
+            Ok(result) => println!("{}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase()),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Volume { value, from, to } => {
-            match convert_volume(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Volume { value, from, to } => match convert_volume(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Time { value, from, to } => {
-            match convert_time(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Time { value, from, to } => match convert_time(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Current { value, from, to } => {
-            match convert_current(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Current { value, from, to } => match convert_current(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Amount { value, from, to } => {
-            match convert_amount(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Amount { value, from, to } => match convert_amount(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Luminosity { value, from, to } => {
-            match convert_luminous_intensity(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Luminosity { value, from, to } => match convert_luminous_intensity(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
-        Commands::Area { value, from, to } => {
-            match convert_area(value, &from, &to) {
-                Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
-                Err(error) => {
-                    eprintln!("❌ Error: {}", error);
-                    std::process::exit(1);
-                }
+        },
+        Commands::Area { value, from, to } => match convert_area(value, &from, &to) {
+            Ok(result) => println!("{} {} = {:.6} {}", value, from, result, to),
+            Err(error) => {
+                eprintln!("❌ Error: {}", error);
+                std::process::exit(1);
             }
-        }
+        },
     }
 }
 
