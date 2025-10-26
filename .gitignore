@@ -3,6 +3,10 @@
 **/*.rs.bk
 # Cargo.lock is included for this binary project for reproducible builds
 
+# WebAssembly build artifacts
+/pkg/
+*.wasm
+
 # IDE/Editor files
 .vscode/
 .idea/
