@@ -5,7 +5,9 @@
 
 # WebAssembly build artifacts
 /pkg/
+!docs/pkg/
 *.wasm
+!docs/pkg/**/*.wasm
 
 # IDE/Editor files
 .vscode/

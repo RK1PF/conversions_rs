@@ -1,0 +1,32 @@
+{
+  "name": "conversions_rs",
+  "type": "module",
+  "collaborators": [
+    "Raihau GRAFFE <graffe.raihau@gmail.com>"
+  ],
+  "description": "A comprehensive unit conversion library and CLI tool with full SI (International System of Units) support",
+  "version": "1.1.0",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RK1PF/conversions_rs"
+  },
+  "files": [
+    "conversions_rs_bg.wasm",
+    "conversions_rs.js",
+    "conversions_rs.d.ts"
+  ],
+  "main": "conversions_rs.js",
+  "homepage": "https://github.com/RK1PF/conversions_rs",
+  "types": "conversions_rs.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "conversion",
+    "units",
+    "SI",
+    "measurement",
+    "physics"
+  ]
+}
