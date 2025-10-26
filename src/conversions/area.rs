@@ -703,42 +703,47 @@ pub fn acres_to_square_meters(acres: f64) -> f64 {
 }
 
 /// General area conversion function that accepts string unit names
-/// 
+///
 /// Converts an area value from one unit to another using string identifiers.
 /// This function is case-insensitive and supports common abbreviations.
 ///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from_unit` - The source unit (e.g., "m²", "cm²", "km²", "ft²", "in²", "ac", "ha")
 /// * `to_unit` - The target unit using the same abbreviations
 ///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value
 /// * `Err(String)` - Error message if the conversion is not supported
 ///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use conversions_rs::convert_area;
-/// 
+///
 /// let square_centimeters = convert_area(2.5, "m²", "cm²").unwrap();
 /// assert_eq!(square_centimeters, 25000.0);
-/// 
+///
 /// let acres = convert_area(10000.0, "m²", "ac").unwrap();
 /// assert!((acres - 2.471).abs() < 0.001);
 /// ```
 pub fn convert_area(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, String> {
     let from_unit = from_unit.to_lowercase();
     let to_unit = to_unit.to_lowercase();
-    
+
     // Convert input to square meters first
     let square_meters = match from_unit.as_str() {
         "m²" | "m2" | "sq_m" | "square_meters" => value,
-        "mm²" | "mm2" | "sq_mm" | "square_millimeters" => square_millimeters::to_square_meters(value),
-        "cm²" | "cm2" | "sq_cm" | "square_centimeters" => square_centimeters::to_square_meters(value),
-        "km²" | "km2" | "sq_km" | "square_kilometers" => square_kilometers::to_square_meters(value),
+        "mm²" | "mm2" | "sq_mm" | "square_millimeters" => {
+            square_millimeters::to_square_meters(value)
+        }
+        "cm²" | "cm2" | "sq_cm" | "square_centimeters" => {
+            square_centimeters::to_square_meters(value)
+        }
+        "km²" | "km2" | "sq_km" | "square_kilometers" => {
+            square_kilometers::to_square_meters(value)
+        }
         "in²" | "in2" | "sq_in" | "square_inches" => square_inches::to_square_meters(value),
         "ft²" | "ft2" | "sq_ft" | "square_feet" => square_feet::to_square_meters(value),
         "yd²" | "yd2" | "sq_yd" | "square_yards" => square_yards::to_square_meters(value),
@@ -747,14 +752,22 @@ pub fn convert_area(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, S
         "mi²" | "mi2" | "sq_mi" | "square_miles" => square_miles::to_square_meters(value),
         _ => return Err(format!("Unsupported area unit: {}", from_unit)),
     };
-    
+
     // Convert square meters to target unit
     let result = match to_unit.as_str() {
         "m²" | "m2" | "sq_m" | "square_meters" => square_meters,
-        "mm²" | "mm2" | "sq_mm" | "square_millimeters" => square_meters::to_square_millimeters(square_meters),
-        "cm²" | "cm2" | "sq_cm" | "square_centimeters" => square_meters::to_square_centimeters(square_meters),
-        "km²" | "km2" | "sq_km" | "square_kilometers" => square_meters::to_square_kilometers(square_meters),
-        "in²" | "in2" | "sq_in" | "square_inches" => square_meters::to_square_inches(square_meters),
+        "mm²" | "mm2" | "sq_mm" | "square_millimeters" => {
+            square_meters::to_square_millimeters(square_meters)
+        }
+        "cm²" | "cm2" | "sq_cm" | "square_centimeters" => {
+            square_meters::to_square_centimeters(square_meters)
+        }
+        "km²" | "km2" | "sq_km" | "square_kilometers" => {
+            square_meters::to_square_kilometers(square_meters)
+        }
+        "in²" | "in2" | "sq_in" | "square_inches" => {
+            square_meters::to_square_inches(square_meters)
+        }
         "ft²" | "ft2" | "sq_ft" | "square_feet" => square_meters::to_square_feet(square_meters),
         "yd²" | "yd2" | "sq_yd" | "square_yards" => square_meters::to_square_yards(square_meters),
         "ac" | "acre" | "acres" => square_meters::to_acres(square_meters),
@@ -762,6 +775,6 @@ pub fn convert_area(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, S
         "mi²" | "mi2" | "sq_mi" | "square_miles" => square_meters::to_square_miles(square_meters),
         _ => return Err(format!("Unsupported area unit: {}", to_unit)),
     };
-    
+
     Ok(result)
 }

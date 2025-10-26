@@ -602,7 +602,9 @@ pub fn convert_volume(value: f64, from: &str, to: &str) -> Result<f64, String> {
     // First convert to liters (base unit)
     let liters = match from.to_lowercase().as_str() {
         "l" | "liter" | "liters" | "litre" | "litres" => value,
-        "ml" | "milliliter" | "milliliters" | "millilitre" | "millilitres" => milliliters_to_liters(value),
+        "ml" | "milliliter" | "milliliters" | "millilitre" | "millilitres" => {
+            milliliters_to_liters(value)
+        }
         "gal" | "gallon" | "gallons" | "gal_us" => gallons_us_to_liters(value),
         "gal_uk" | "gallon_uk" | "gallons_uk" => gallons_uk_to_liters(value),
         "fl_oz" | "fl_oz_us" | "fluid_ounce" | "fluid_ounces" => fluid_ounces_us_to_liters(value),
@@ -616,7 +618,9 @@ pub fn convert_volume(value: f64, from: &str, to: &str) -> Result<f64, String> {
     // Then convert from liters to target unit
     let result = match to.to_lowercase().as_str() {
         "l" | "liter" | "liters" | "litre" | "litres" => liters,
-        "ml" | "milliliter" | "milliliters" | "millilitre" | "millilitres" => liters_to_milliliters(liters),
+        "ml" | "milliliter" | "milliliters" | "millilitre" | "millilitres" => {
+            liters_to_milliliters(liters)
+        }
         "gal" | "gallon" | "gallons" | "gal_us" => liters_to_gallons_us(liters),
         "gal_uk" | "gallon_uk" | "gallons_uk" => liters_to_gallons_uk(liters),
         "fl_oz" | "fl_oz_us" | "fluid_ounce" | "fluid_ounces" => liters_to_fluid_ounces_us(liters),

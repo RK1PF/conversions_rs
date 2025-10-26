@@ -182,55 +182,58 @@ pub fn kiloamperes_to_amperes(kiloamperes: f64) -> f64 {
 }
 
 /// General electric current conversion function that accepts string unit names
-/// 
+///
 /// Converts an electric current value from one unit to another using string identifiers.
 /// This function is case-insensitive and supports common abbreviations.
 ///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from_unit` - The source unit (e.g., "A", "mA", "μA", "nA", "kA")
 /// * `to_unit` - The target unit using the same abbreviations
 ///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value
 /// * `Err(String)` - Error message if the conversion is not supported
 ///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use conversions_rs::convert_current;
-/// 
+///
 /// let milliamps = convert_current(2.5, "A", "mA").unwrap();
 /// assert_eq!(milliamps, 2500.0);
-/// 
+///
 /// let amps = convert_current(500.0, "mA", "A").unwrap();
 /// assert_eq!(amps, 0.5);
 /// ```
 pub fn convert_current(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, String> {
     let from_unit = from_unit.to_lowercase();
     let to_unit = to_unit.to_lowercase();
-    
+
     // Convert input to amperes first
     let amperes = match from_unit.as_str() {
         "a" | "amp" | "ampere" | "amperes" => value,
         "ma" | "milliamp" | "milliampere" | "milliamperes" => milliamperes::to_amperes(value),
-        "μa" | "ua" | "microamp" | "microampere" | "microamperes" => microamperes::to_amperes(value),
+        "μa" | "ua" | "microamp" | "microampere" | "microamperes" => {
+            microamperes::to_amperes(value)
+        }
         "na" | "nanoamp" | "nanoampere" | "nanoamperes" => nanoamperes::to_amperes(value),
         "ka" | "kiloamp" | "kiloampere" | "kiloamperes" => kiloamperes::to_amperes(value),
         _ => return Err(format!("Unsupported current unit: {}", from_unit)),
     };
-    
+
     // Convert amperes to target unit
     let result = match to_unit.as_str() {
         "a" | "amp" | "ampere" | "amperes" => amperes,
         "ma" | "milliamp" | "milliampere" | "milliamperes" => amperes::to_milliamperes(amperes),
-        "μa" | "ua" | "microamp" | "microampere" | "microamperes" => amperes::to_microamperes(amperes),
+        "μa" | "ua" | "microamp" | "microampere" | "microamperes" => {
+            amperes::to_microamperes(amperes)
+        }
         "na" | "nanoamp" | "nanoampere" | "nanoamperes" => amperes::to_nanoamperes(amperes),
         "ka" | "kiloamp" | "kiloampere" | "kiloamperes" => amperes::to_kiloamperes(amperes),
         _ => return Err(format!("Unsupported current unit: {}", to_unit)),
     };
-    
+
     Ok(result)
 }

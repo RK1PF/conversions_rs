@@ -263,36 +263,35 @@ pub fn kilomoles_to_moles(kilomoles: f64) -> f64 {
 }
 
 /// General amount of substance conversion function that accepts string unit names
-/// 
+///
 /// Converts an amount of substance value from one unit to another using string identifiers.
 /// This function is case-insensitive and supports common abbreviations.
 ///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from_unit` - The source unit (e.g., "mol", "mmol", "μmol", "nmol", "pmol", "kmol")
 /// * `to_unit` - The target unit using the same abbreviations
 ///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value
 /// * `Err(String)` - Error message if the conversion is not supported
 ///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use conversions_rs::convert_amount;
-/// 
+///
 /// let millimoles = convert_amount(2.5, "mol", "mmol").unwrap();
 /// assert_eq!(millimoles, 2500.0);
-/// 
+///
 /// let moles = convert_amount(500.0, "mmol", "mol").unwrap();
 /// assert_eq!(moles, 0.5);
 /// ```
 pub fn convert_amount(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, String> {
     let from_unit = from_unit.to_lowercase();
     let to_unit = to_unit.to_lowercase();
-    
+
     // Convert input to moles first
     let moles = match from_unit.as_str() {
         "mol" | "mole" | "moles" => value,
@@ -303,7 +302,7 @@ pub fn convert_amount(value: f64, from_unit: &str, to_unit: &str) -> Result<f64,
         "kmol" | "kilomol" | "kilomole" | "kilomoles" => kilomoles::to_moles(value),
         _ => return Err(format!("Unsupported amount unit: {}", from_unit)),
     };
-    
+
     // Convert moles to target unit
     let result = match to_unit.as_str() {
         "mol" | "mole" | "moles" => moles,
@@ -314,6 +313,6 @@ pub fn convert_amount(value: f64, from_unit: &str, to_unit: &str) -> Result<f64,
         "kmol" | "kilomol" | "kilomole" | "kilomoles" => moles::to_kilomoles(moles),
         _ => return Err(format!("Unsupported amount unit: {}", to_unit)),
     };
-    
+
     Ok(result)
 }

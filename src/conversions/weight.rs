@@ -231,24 +231,24 @@ pub mod stones {
 
 // Legacy function wrappers for backward compatibility
 /// Converts kilograms to pounds (legacy function).
-/// 
+///
 /// **Note:** Consider using `kilograms::to_pounds()` for better organization.
-/// 
+///
 /// Uses the conversion factor: 1 kilogram = 2.20462 pounds
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `kg` - The weight in kilograms to convert
-/// 
+///
 /// # Returns
-/// 
+///
 /// The equivalent weight in pounds
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use conversions_rs::kilograms_to_pounds;
-/// 
+///
 /// let lbs = kilograms_to_pounds(1.0);
 /// assert!((lbs - 2.20462).abs() < 0.0001);
 /// ```
@@ -257,24 +257,24 @@ pub fn kilograms_to_pounds(kg: f64) -> f64 {
 }
 
 /// Converts pounds to kilograms (legacy function).
-/// 
+///
 /// **Note:** Consider using `pounds::to_kilograms()` for better organization.
-/// 
+///
 /// Uses the conversion factor: 1 pound = 0.453592 kilograms
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `lbs` - The weight in pounds to convert
-/// 
+///
 /// # Returns
-/// 
+///
 /// The equivalent weight in kilograms
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use conversions_rs::pounds_to_kilograms;
-/// 
+///
 /// let kg = pounds_to_kilograms(2.20462);
 /// assert!((kg - 1.0).abs() < 0.0001);
 /// ```
@@ -315,58 +315,57 @@ pub fn stones_to_kilograms(stones: f64) -> f64 {
 }
 
 /// Converts between any two supported weight/mass units.
-/// 
+///
 /// This is the main conversion function that can handle conversions between any
-/// combination of supported weight/mass units. All conversions are done through 
+/// combination of supported weight/mass units. All conversions are done through
 /// kilograms as an intermediate base unit to ensure accuracy and consistency.
-/// 
+///
 /// # Supported Units
-/// 
-/// * **Metric:** `kg`, `kilogram`, `kilograms`, `g`, `gram`, `grams`, 
+///
+/// * **Metric:** `kg`, `kilogram`, `kilograms`, `g`, `gram`, `grams`,
 ///   `t`, `ton`, `tons` (metric tons)
 /// * **Imperial:** `lb`, `lbs`, `pound`, `pounds`, `oz`, `ounce`, `ounces`,
 ///   `st`, `stone`, `stones`
-/// 
+///
 /// Unit names are case-insensitive and support both singular and plural forms.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from` - The source unit (case-insensitive)
 /// * `to` - The target unit (case-insensitive)
-/// 
+///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value if both units are recognized
 /// * `Err(String)` - An error message if either unit is not supported
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use conversions_rs::convert_weight;
-/// 
+///
 /// // Convert 10 kilograms to pounds
 /// let result = convert_weight(10.0, "kg", "lb").unwrap();
 /// assert!((result - 22.0462).abs() < 0.001);
-/// 
+///
 /// // Convert 1000 grams to kilograms
 /// let result = convert_weight(1000.0, "g", "kg").unwrap();
 /// assert_eq!(result, 1.0);
-/// 
+///
 /// // Convert 16 ounces to pounds
 /// let result = convert_weight(16.0, "oz", "lb").unwrap();
 /// assert!((result - 1.0).abs() < 0.01);
-/// 
+///
 /// // Case-insensitive and plural forms work
 /// let result = convert_weight(1.0, "KILOGRAM", "pounds").unwrap();
 /// assert!((result - 2.20462).abs() < 0.0001);
-/// 
+///
 /// // Error handling for unknown units
 /// assert!(convert_weight(1.0, "invalid", "kg").is_err());
 /// ```
-/// 
+///
 /// # Conversion Accuracy
-/// 
+///
 /// All conversions use standard international conversion factors:
 /// - 1 kilogram = 2.20462 pounds
 /// - 1 kilogram = 1000 grams

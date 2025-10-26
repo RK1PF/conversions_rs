@@ -598,36 +598,35 @@ pub fn seconds_to_nanoseconds(seconds: f64) -> f64 {
 }
 
 /// General time conversion function that accepts string unit names
-/// 
+///
 /// Converts a time value from one unit to another using string identifiers.
 /// This function is case-insensitive and supports common abbreviations.
 ///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from_unit` - The source unit (e.g., "s", "min", "h", "day", "week", "year", "ms", "us", "ns")
 /// * `to_unit` - The target unit using the same abbreviations
 ///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value
 /// * `Err(String)` - Error message if the conversion is not supported
 ///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use conversions_rs::convert_time;
-/// 
+///
 /// let minutes = convert_time(3600.0, "s", "min").unwrap();
 /// assert_eq!(minutes, 60.0);
-/// 
+///
 /// let milliseconds = convert_time(2.5, "s", "ms").unwrap();
 /// assert_eq!(milliseconds, 2500.0);
 /// ```
 pub fn convert_time(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, String> {
     let from_unit = from_unit.to_lowercase();
     let to_unit = to_unit.to_lowercase();
-    
+
     // Convert input to seconds first
     let seconds = match from_unit.as_str() {
         "s" | "sec" | "second" | "seconds" => value,
@@ -641,7 +640,7 @@ pub fn convert_time(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, S
         "ns" | "nanosecond" | "nanoseconds" => nanoseconds::to_seconds(value),
         _ => return Err(format!("Unsupported time unit: {}", from_unit)),
     };
-    
+
     // Convert seconds to target unit
     let result = match to_unit.as_str() {
         "s" | "sec" | "second" | "seconds" => seconds,
@@ -655,6 +654,6 @@ pub fn convert_time(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, S
         "ns" | "nanosecond" | "nanoseconds" => seconds::to_nanoseconds(seconds),
         _ => return Err(format!("Unsupported time unit: {}", to_unit)),
     };
-    
+
     Ok(result)
 }

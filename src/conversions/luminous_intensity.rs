@@ -261,36 +261,39 @@ pub fn hefnerkerze_to_candela(hefnerkerze: f64) -> f64 {
 }
 
 /// General luminous intensity conversion function that accepts string unit names
-/// 
+///
 /// Converts a luminous intensity value from one unit to another using string identifiers.
 /// This function is case-insensitive and supports common abbreviations.
 ///
 /// # Arguments
-/// 
+///
 /// * `value` - The numeric value to convert
 /// * `from_unit` - The source unit (e.g., "cd", "mcd", "kcd", "hk", "ic", "dc")
 /// * `to_unit` - The target unit using the same abbreviations
 ///
 /// # Returns
-/// 
 /// * `Ok(f64)` - The converted value
 /// * `Err(String)` - Error message if the conversion is not supported
 ///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use conversions_rs::convert_luminous_intensity;
-/// 
+///
 /// let millicandela = convert_luminous_intensity(2.5, "cd", "mcd").unwrap();
 /// assert_eq!(millicandela, 2500.0);
-/// 
+///
 /// let candela = convert_luminous_intensity(500.0, "mcd", "cd").unwrap();
 /// assert_eq!(candela, 0.5);
 /// ```
-pub fn convert_luminous_intensity(value: f64, from_unit: &str, to_unit: &str) -> Result<f64, String> {
+pub fn convert_luminous_intensity(
+    value: f64,
+    from_unit: &str,
+    to_unit: &str,
+) -> Result<f64, String> {
     let from_unit = from_unit.to_lowercase();
     let to_unit = to_unit.to_lowercase();
-    
+
     // Convert input to candela first
     let candela = match from_unit.as_str() {
         "cd" | "candela" => value,
@@ -299,9 +302,14 @@ pub fn convert_luminous_intensity(value: f64, from_unit: &str, to_unit: &str) ->
         "hk" | "hefnerkerze" => hefnerkerze::to_candela(value),
         "ic" | "international_candle" | "intl_candle" => international_candle::to_candela(value),
         "dc" | "decimal_candle" => decimal_candle::to_candela(value),
-        _ => return Err(format!("Unsupported luminous intensity unit: {}", from_unit)),
+        _ => {
+            return Err(format!(
+                "Unsupported luminous intensity unit: {}",
+                from_unit
+            ))
+        }
     };
-    
+
     // Convert candela to target unit
     let result = match to_unit.as_str() {
         "cd" | "candela" => candela,
@@ -312,6 +320,6 @@ pub fn convert_luminous_intensity(value: f64, from_unit: &str, to_unit: &str) ->
         "dc" | "decimal_candle" => candela::to_decimal_candle(candela),
         _ => return Err(format!("Unsupported luminous intensity unit: {}", to_unit)),
     };
-    
+
     Ok(result)
 }
