@@ -2,19 +2,22 @@
 
 ## ✅ Fixed and Re-released
 
-**Issue**: The v1.2.0 release failed on crates.io due to too many keywords (7 max allowed is 5)
+**Issue 1**: The v1.2.0 release failed on crates.io due to too many keywords (7 max allowed is 5)
+**Issue 2**: cargo publish failed due to uncommitted Cargo.lock changes
 
 **Fix Applied**:
 - Reduced keywords from 7 to 5: `["conversion", "units", "measurement", "wasm", "SI"]`  
+- Committed updated Cargo.lock file
 - Bumped version to v1.2.1
-- Created new release tag
+- Recreated release tag with clean git state
 
 ## ✅ Tag Created Successfully
 
 - **Tag**: `v1.2.1` 
-- **Created**: October 26, 2025
+- **Created**: October 26, 2025 (updated)
 - **Pushed to**: GitHub repository
-- **Fixed**: crates.io keyword limit issue
+- **Fixed**: crates.io keyword limit issue + Cargo.lock commit issue
+- **Status**: Clean git working directory ✅
 
 ## 🔄 What's Happening Now
 
