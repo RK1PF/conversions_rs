@@ -29,4 +29,4 @@ name = "conversions_rs"
 path = "src/lib.rs"
 
 [dependencies]
-clap = { version = "4.0", features = ["derive"] }
+clap = { version = "=4.4.0", features = ["derive"] }
