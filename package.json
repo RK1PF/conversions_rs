@@ -1,0 +1,26 @@
+{
+  "name": "conversions-rs-dev",
+  "version": "1.1.0",
+  "description": "Development environment for conversions_rs WASM builds",
+  "scripts": {
+    "build:wasm": "wasm-pack build --target web --out-dir pkg/web --features wasm",
+    "build:wasm:node": "wasm-pack build --target nodejs --out-dir pkg/nodejs --features wasm",
+    "build:wasm:bundler": "wasm-pack build --target bundler --out-dir pkg/bundler --features wasm",
+    "build:wasm:all": "npm run build:wasm && npm run build:wasm:node && npm run build:wasm:bundler",
+    "test:wasm": "node test-wasm.js",
+    "serve": "python -m http.server 8000",
+    "demo": "npm run build:wasm && npm run serve"
+  },
+  "keywords": [
+    "rust",
+    "wasm",
+    "webassembly", 
+    "unit-conversion",
+    "SI-units"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RK1PF/conversions_rs.git"
+  }
+}

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversions RS - WASM Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2b2b2b;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .converter {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 8px;
+            padding: 10px;
+            background-color: #f0f8f0;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .error {
+            background-color: #ffe6e6;
+            border-left-color: #f44336;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 15px;
+            color: #666;
+        }
+
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .converter {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            button {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .container:hover {
+            transform: translateY(-2px);
+            transition: 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>🔄 Conversions RS - WebAssembly Demo</h1>
+
+    <div class="container">
+        <h2>📖 About</h2>
+        <p>This demo showcases the <strong>conversions_rs</strong> Rust library compiled to WebAssembly.
+            The library provides comprehensive unit conversions for SI base units and derived units including
+            length, weight, temperature, volume, time, electric current, amount of substance, luminous intensity, and
+            area.</p>
+
+        <div id="loading" class="loading">
+            Loading WebAssembly module...
+        </div>
+    </div>
+
+    <div id="demo-content" style="display: none;">
+        <div class="converter-grid">
+            <!-- Length Conversions -->
+            <div class="container">
+                <h2>📏 Length Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="length-value" placeholder="Enter value" value="100">
+                    <select id="length-from">
+                        <option value="m">Meters</option>
+                        <option value="km">Kilometers</option>
+                        <option value="cm">Centimeters</option>
+                        <option value="mm">Millimeters</option>
+                        <option value="ft" selected>Feet</option>
+                        <option value="in">Inches</option>
+                        <option value="yd">Yards</option>
+                        <option value="mi">Miles</option>
+                    </select>
+                    <select id="length-to">
+                        <option value="m" selected>Meters</option>
+                        <option value="km">Kilometers</option>
+                        <option value="cm">Centimeters</option>
+                        <option value="mm">Millimeters</option>
+                        <option value="ft">Feet</option>
+                        <option value="in">Inches</option>
+                        <option value="yd">Yards</option>
+                        <option value="mi">Miles</option>
+                    </select>
+                    <button onclick="convertLength()">Convert</button>
+                </div>
+                <div id="length-result"></div>
+            </div>
+
+            <!-- Weight Conversions -->
+            <div class="container">
+                <h2>⚖️ Weight Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="weight-value" placeholder="Enter value" value="10">
+                    <select id="weight-from">
+                        <option value="kg" selected>Kilograms</option>
+                        <option value="g">Grams</option>
+                        <option value="mg">Milligrams</option>
+                        <option value="lb">Pounds</option>
+                        <option value="oz">Ounces</option>
+                        <option value="t">Metric Tons</option>
+                        <option value="st">Stones</option>
+                    </select>
+                    <select id="weight-to">
+                        <option value="kg">Kilograms</option>
+                        <option value="g">Grams</option>
+                        <option value="mg">Milligrams</option>
+                        <option value="lb" selected>Pounds</option>
+                        <option value="oz">Ounces</option>
+                        <option value="t">Metric Tons</option>
+                        <option value="st">Stones</option>
+                    </select>
+                    <button onclick="convertWeight()">Convert</button>
+                </div>
+                <div id="weight-result"></div>
+            </div>
+
+            <!-- Temperature Conversions -->
+            <div class="container">
+                <h2>🌡️ Temperature Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="temp-value" placeholder="Enter value" value="25">
+                    <select id="temp-from">
+                        <option value="C" selected>Celsius</option>
+                        <option value="F">Fahrenheit</option>
+                        <option value="K">Kelvin</option>
+                    </select>
+                    <select id="temp-to">
+                        <option value="C">Celsius</option>
+                        <option value="F" selected>Fahrenheit</option>
+                        <option value="K">Kelvin</option>
+                    </select>
+                    <button onclick="convertTemperature()">Convert</button>
+                </div>
+                <div id="temp-result"></div>
+            </div>
+
+            <!-- Volume Conversions -->
+            <div class="container">
+                <h2>🫗 Volume Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="volume-value" placeholder="Enter value" value="5">
+                    <select id="volume-from">
+                        <option value="l" selected>Liters</option>
+                        <option value="ml">Milliliters</option>
+                        <option value="gal">US Gallons</option>
+                        <option value="gal_uk">UK Gallons</option>
+                        <option value="fl_oz">US Fluid Ounces</option>
+                        <option value="cup">Cups</option>
+                        <option value="pt">Pints</option>
+                        <option value="qt">Quarts</option>
+                    </select>
+                    <select id="volume-to">
+                        <option value="l">Liters</option>
+                        <option value="ml">Milliliters</option>
+                        <option value="gal" selected>US Gallons</option>
+                        <option value="gal_uk">UK Gallons</option>
+                        <option value="fl_oz">US Fluid Ounces</option>
+                        <option value="cup">Cups</option>
+                        <option value="pt">Pints</option>
+                        <option value="qt">Quarts</option>
+                    </select>
+                    <button onclick="convertVolume()">Convert</button>
+                </div>
+                <div id="volume-result"></div>
+            </div>
+
+            <!-- Time Conversions -->
+            <div class="container">
+                <h2>⏰ Time Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="time-value" placeholder="Enter value" value="120">
+                    <select id="time-from">
+                        <option value="s">Seconds</option>
+                        <option value="min" selected>Minutes</option>
+                        <option value="h">Hours</option>
+                        <option value="d">Days</option>
+                        <option value="week">Weeks</option>
+                        <option value="month">Months</option>
+                        <option value="year">Years</option>
+                        <option value="ms">Milliseconds</option>
+                    </select>
+                    <select id="time-to">
+                        <option value="s">Seconds</option>
+                        <option value="min">Minutes</option>
+                        <option value="h" selected>Hours</option>
+                        <option value="d">Days</option>
+                        <option value="week">Weeks</option>
+                        <option value="month">Months</option>
+                        <option value="year">Years</option>
+                        <option value="ms">Milliseconds</option>
+                    </select>
+                    <button onclick="convertTime()">Convert</button>
+                </div>
+                <div id="time-result"></div>
+            </div>
+
+            <!-- Area Conversions -->
+            <div class="container">
+                <h2>🏞️ Area Conversions</h2>
+                <div class="converter">
+                    <input type="number" id="area-value" placeholder="Enter value" value="10000">
+                    <select id="area-from">
+                        <option value="m²" selected>Square Meters</option>
+                        <option value="km²">Square Kilometers</option>
+                        <option value="cm²">Square Centimeters</option>
+                        <option value="ha">Hectares</option>
+                        <option value="acre">Acres</option>
+                        <option value="ft²">Square Feet</option>
+                        <option value="in²">Square Inches</option>
+                        <option value="yd²">Square Yards</option>
+                        <option value="mi²">Square Miles</option>
+                    </select>
+                    <select id="area-to">
+                        <option value="m²">Square Meters</option>
+                        <option value="km²">Square Kilometers</option>
+                        <option value="cm²">Square Centimeters</option>
+                        <option value="ha" selected>Hectares</option>
+                        <option value="acre">Acres</option>
+                        <option value="ft²">Square Feet</option>
+                        <option value="in²">Square Inches</option>
+                        <option value="yd²">Square Yards</option>
+                        <option value="mi²">Square Miles</option>
+                    </select>
+                    <button onclick="convertArea()">Convert</button>
+                </div>
+                <div id="area-result"></div>
+            </div>
+        </div>
+
+        <!-- Usage Examples -->
+        <div class="container">
+            <h2>💻 JavaScript Usage Examples</h2>
+            <p>Here's how to use the WASM module in your JavaScript code:</p>
+
+            <h3>Basic Import and Initialization</h3>
+            <pre><code>import init, { 
+    convert_length_wasm, 
+    convert_weight_wasm, 
+    convert_temperature_wasm,
+    get_supported_units 
+} from './pkg/web/conversions_rs.js';
+
+// Initialize the WASM module
+await init();
+
+// Now you can use the conversion functions
+const result = convert_length_wasm(100, "ft", "m");
+if (result.success) {
+    console.log(`100 feet = ${result.value} meters`);
+} else {
+    console.error("Conversion failed:", result.error);
+}</code></pre>
+
+            <h3>Error Handling</h3>
+            <pre><code>const result = convert_weight_wasm(10, "kg", "invalid_unit");
+if (!result.success) {
+    console.error("Error:", result.error);
+    // Handle the error appropriately
+}</code></pre>
+
+            <h3>Getting Supported Units</h3>
+            <pre><code>const lengthUnits = get_supported_units("length");
+console.log("Supported length units:", lengthUnits);
+// Output: ["m", "km", "cm", "mm", "ft", "in", "yd", "mi", ...]</code></pre>
+        </div>
+    </div>
+
+    <script type="module">
+        import init, {
+            convert_length_wasm,
+            convert_weight_wasm,
+            convert_temperature_wasm,
+            convert_volume_wasm,
+            convert_time_wasm,
+            convert_area_wasm,
+            get_supported_units
+        } from './pkg/web/conversions_rs.js';
+
+        async function loadWasm() {
+            try {
+                await init();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('demo-content').style.display = 'block';
+                console.log('WASM module loaded successfully');
+
+                // Populate unit options dynamically
+                // populateUnitOptions();
+
+                // Run initial conversions
+                convertLength();
+                convertWeight();
+                convertTemperature();
+                convertVolume();
+                convertTime();
+                convertArea();
+            } catch (error) {
+                document.getElementById('loading').innerHTML =
+                    '<p style="color: red;">Failed to load WASM module. Please ensure you have built the WASM package and are serving this page over HTTP/HTTPS.</p>' +
+                    '<p>Error: ' + error.message + '</p>' +
+                    '<p>To build the WASM package, run: <code>./build-wasm.bat</code> (Windows) or <code>./build-wasm.sh</code> (Unix)</p>';
+            }
+        }
+
+        function displayResult(elementId, result, fromValue, fromUnit, toUnit) {
+            const element = document.getElementById(elementId);
+            if (result.success) {
+                element.innerHTML = `<div class="result">
+                    <strong>Result:</strong> ${fromValue} ${fromUnit} = <strong>${result.value.toFixed(6)}</strong> ${toUnit}
+                </div>`;
+            } else {
+                element.innerHTML = `<div class="result error">
+                    <strong>Error:</strong> ${result.error}
+                </div>`;
+            }
+        }
+
+        window.convertLength = function () {
+            const value = parseFloat(document.getElementById('length-value').value);
+            const from = document.getElementById('length-from').value;
+            const to = document.getElementById('length-to').value;
+
+            const result = convert_length_wasm(value, from, to);
+            displayResult('length-result', result, value, from, to);
+        }
+
+        window.convertWeight = function () {
+            const value = parseFloat(document.getElementById('weight-value').value);
+            const from = document.getElementById('weight-from').value;
+            const to = document.getElementById('weight-to').value;
+
+            const result = convert_weight_wasm(value, from, to);
+            displayResult('weight-result', result, value, from, to);
+        }
+
+        window.convertTemperature = function () {
+            const value = parseFloat(document.getElementById('temp-value').value);
+            const from = document.getElementById('temp-from').value;
+            const to = document.getElementById('temp-to').value;
+
+            const result = convert_temperature_wasm(value, from, to);
+            displayResult('temp-result', result, value, from, to);
+        }
+
+        window.convertVolume = function () {
+            const value = parseFloat(document.getElementById('volume-value').value);
+            const from = document.getElementById('volume-from').value;
+            const to = document.getElementById('volume-to').value;
+
+            const result = convert_volume_wasm(value, from, to);
+            displayResult('volume-result', result, value, from, to);
+        }
+
+        window.convertTime = function () {
+            const value = parseFloat(document.getElementById('time-value').value);
+            const from = document.getElementById('time-from').value;
+            const to = document.getElementById('time-to').value;
+
+            const result = convert_time_wasm(value, from, to);
+            displayResult('time-result', result, value, from, to);
+        }
+
+        window.convertArea = function () {
+            const value = parseFloat(document.getElementById('area-value').value);
+            const from = document.getElementById('area-from').value;
+            const to = document.getElementById('area-to').value;
+
+            const result = convert_area_wasm(value, from, to);
+            displayResult('area-result', result, value, from, to);
+        }
+
+        // Load the WASM module when the page loads
+        loadWasm();
+    </script>
+</body>
+
+</html>

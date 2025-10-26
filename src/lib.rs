@@ -177,6 +177,10 @@
 
 pub mod conversions;
 
+// WebAssembly bindings (only compiled when wasm feature is enabled)
+#[cfg(feature = "wasm")]
+pub mod wasm;
+
 pub use conversions::*;
 
 #[cfg(test)]

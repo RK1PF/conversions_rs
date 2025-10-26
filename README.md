@@ -44,6 +44,8 @@ conversions_rs = "1.1.0"
 
 ## Features
 
+✨ **Multi-Platform Support**: Command-line tool, Rust library, and WebAssembly module for web browsers
+
 ### SI Base Units
 - **Length Conversions**: meters, kilometers, centimeters, millimeters, feet, inches, yards, miles
 - **Mass Conversions**: kilograms, grams, pounds, ounces, tons, stones  
@@ -192,6 +194,136 @@ let kg = pounds_to_kilograms(22.0);
 let fahrenheit = celsius_to_fahrenheit(25.0);
 let ml = liters_to_milliliters(2.5);
 ```
+
+### WebAssembly (WASM) Usage 🌐
+
+The library can be compiled to WebAssembly for use in web browsers and JavaScript environments.
+
+#### Prerequisites
+
+First, install `wasm-pack`:
+```bash
+cargo install wasm-pack
+```
+
+#### Building for WebAssembly
+
+Use the provided build scripts to compile for different WASM targets:
+
+**Windows:**
+```bash
+./build-wasm.bat
+```
+
+**Unix/Linux/macOS:**
+```bash
+./build-wasm.sh
+```
+
+This will generate WASM packages in the `pkg/` directory for different targets:
+- `pkg/web/` - For direct browser usage
+- `pkg/nodejs/` - For Node.js applications  
+- `pkg/bundler/` - For webpack, rollup, etc.
+
+#### JavaScript/TypeScript Usage
+
+```javascript
+import init, { 
+    convert_length_wasm, 
+    convert_weight_wasm, 
+    convert_temperature_wasm,
+    convert_volume_wasm,
+    convert_time_wasm,
+    convert_area_wasm,
+    get_supported_units
+} from './pkg/web/conversions_rs.js';
+
+// Initialize the WASM module
+await init();
+
+// Perform conversions
+const lengthResult = convert_length_wasm(100, "ft", "m");
+if (lengthResult.success) {
+    console.log(`100 feet = ${lengthResult.value} meters`);
+} else {
+    console.error("Conversion failed:", lengthResult.error);
+}
+
+// Temperature conversion
+const tempResult = convert_temperature_wasm(25, "C", "F");
+console.log(`25°C = ${tempResult.value}°F`); // 25°C = 77°F
+
+// Get supported units for a conversion type
+const lengthUnits = get_supported_units("length");
+console.log("Length units:", lengthUnits);
+// Output: ["m", "km", "cm", "mm", "ft", "in", "yd", "mi", ...]
+```
+
+#### WASM Result Type
+
+All WASM conversion functions return a `ConversionResult` object:
+
+```typescript
+interface ConversionResult {
+    success: boolean;    // Whether the conversion succeeded
+    value: number;       // The converted value (0 if failed)
+    error?: string;      // Error message if conversion failed
+}
+```
+
+#### HTML Demo
+
+A complete HTML demo is provided in `demo.html` that showcases all WASM functionality. 
+Open it in a web browser (must be served over HTTP/HTTPS) to try the conversions interactively.
+
+#### Integration Examples
+
+**React/Next.js:**
+```jsx
+import { useEffect, useState } from 'react';
+import init, { convert_length_wasm } from './pkg/web/conversions_rs.js';
+
+function Converter() {
+    const [wasmReady, setWasmReady] = useState(false);
+
+    useEffect(() => {
+        init().then(() => setWasmReady(true));
+    }, []);
+
+    const handleConvert = () => {
+        if (!wasmReady) return;
+        
+        const result = convert_length_wasm(100, "ft", "m");
+        if (result.success) {
+            console.log("Converted:", result.value);
+        }
+    };
+
+    return wasmReady ? (
+        <button onClick={handleConvert}>Convert 100ft to meters</button>
+    ) : (
+        <div>Loading WASM...</div>
+    );
+}
+```
+
+**Node.js:**
+```javascript
+const { convert_length_wasm } = require('./pkg/nodejs/conversions_rs.js');
+
+const result = convert_length_wasm(100, "ft", "m");
+console.log(`100 feet = ${result.value} meters`);
+```
+
+#### Browser Support
+
+The WASM module supports all modern browsers with WebAssembly support:
+- Chrome 57+
+- Firefox 52+  
+- Safari 11+
+- Edge 16+
+
+For older browsers, consider using a WebAssembly polyfill.
 
 ## Supported Units
 
