@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 //! # Conversions RS - A Comprehensive Unit Conversion Library
 //!
 //! `conversions_rs` is a Rust library and command-line tool for converting between

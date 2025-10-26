@@ -20,6 +20,7 @@ pub mod candela {
     /// Converts candela to hefnerkerze (approximation).
     /// # Arguments
     /// * `value` - The luminous intensity in candela to convert
+    ///
     /// Note: 1 candela ≈ 1.11 hefnerkerze
     pub fn to_hefnerkerze(value: f64) -> f64 {
         value * 1.11
@@ -28,6 +29,7 @@ pub mod candela {
     /// Converts candela to international candle (approximation).
     /// # Arguments
     /// * `value` - The luminous intensity in candela to convert
+    ///
     /// Note: 1 candela ≈ 0.98 international candle
     pub fn to_international_candle(value: f64) -> f64 {
         value * 0.98
@@ -36,6 +38,7 @@ pub mod candela {
     /// Converts candela to decimal candle.
     /// # Arguments
     /// * `value` - The luminous intensity in candela to convert
+    ///
     /// Note: 1 candela = 1 decimal candle (by definition)
     pub fn to_decimal_candle(value: f64) -> f64 {
         value
@@ -123,6 +126,7 @@ pub mod hefnerkerze {
     /// Converts hefnerkerze to candela.
     /// # Arguments
     /// * `value` - The luminous intensity in hefnerkerze to convert
+    ///
     /// Note: 1 hefnerkerze ≈ 0.901 candela
     pub fn to_candela(value: f64) -> f64 {
         value / 1.11
@@ -162,6 +166,7 @@ pub mod international_candle {
     /// Converts international candle to candela.
     /// # Arguments
     /// * `value` - The luminous intensity in international candle to convert
+    ///
     /// Note: 1 international candle ≈ 1.02 candela
     pub fn to_candela(value: f64) -> f64 {
         value / 0.98
