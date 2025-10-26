@@ -1,6 +1,6 @@
 [package]
 name = "conversions_rs"
-version = "1.2.0"
+version = "1.2.1"
 edition = "2021"
 description = "A comprehensive unit conversion library, CLI tool, and WebAssembly module with full SI (International System of Units) support"
 license = "MIT OR Apache-2.0"
@@ -8,7 +8,7 @@ repository = "https://github.com/RK1PF/conversions_rs"
 homepage = "https://github.com/RK1PF/conversions_rs"
 documentation = "https://docs.rs/conversions_rs"
 readme = "README.md"
-keywords = ["conversion", "units", "SI", "measurement", "physics", "wasm", "webassembly"]
+keywords = ["conversion", "units", "measurement", "wasm", "SI"]
 categories = ["command-line-utilities", "science", "mathematics", "wasm"]
 authors = ["Raihau GRAFFE <graffe.raihau@gmail.com>"]
 rust-version = "1.70.0"
