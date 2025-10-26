@@ -42,6 +42,19 @@ Add this to your `Cargo.toml`:
 conversions_rs = "1.2.0"
 ```
 
+### For JavaScript/TypeScript (WebAssembly)
+
+Install from npm for use in web browsers or Node.js:
+
+```bash
+npm install conversions_rs
+```
+
+Or download WASM packages directly from the [releases page](https://github.com/RK1PF/conversions_rs/releases):
+- `conversions_rs-wasm-web.tar.gz` - For web browsers
+- `conversions_rs-wasm-nodejs.tar.gz` - For Node.js applications  
+- `conversions_rs-wasm-bundler.tar.gz` - For bundlers (webpack, rollup, etc.)
+
 ## Features
 
 ✨ **Multi-Platform Support**: Command-line tool, Rust library, and WebAssembly module for web browsers
@@ -199,14 +212,25 @@ let ml = liters_to_milliliters(2.5);
 
 The library can be compiled to WebAssembly for use in web browsers and JavaScript environments.
 
-#### Prerequisites
+#### Installation Options
+
+**Option 1: Install from npm (Recommended)**
+```bash
+npm install conversions_rs
+```
+
+**Option 2: Download from GitHub Releases**
+Download the appropriate WASM package from the [releases page](https://github.com/RK1PF/conversions_rs/releases):
+- `conversions_rs-wasm-web.tar.gz` - For web browsers
+- `conversions_rs-wasm-nodejs.tar.gz` - For Node.js applications  
+- `conversions_rs-wasm-bundler.tar.gz` - For bundlers (webpack, rollup, etc.)
+
+**Option 3: Build from source**
 
 First, install `wasm-pack`:
 ```bash
 cargo install wasm-pack
 ```
-
-#### Building for WebAssembly
 
 Use the provided build scripts to compile for different WASM targets:
 
@@ -227,6 +251,23 @@ This will generate WASM packages in the `pkg/` directory for different targets:
 
 #### JavaScript/TypeScript Usage
 
+**Using npm package:**
+```javascript
+import init, { 
+    convert_length_wasm, 
+    convert_weight_wasm, 
+    convert_temperature_wasm,
+    convert_volume_wasm,
+    convert_time_wasm,
+    convert_area_wasm,
+    get_supported_units
+} from 'conversions_rs';
+
+// Initialize the WASM module
+await init();
+```
+
+**Using local build:**
 ```javascript
 import init, { 
     convert_length_wasm, 
@@ -240,7 +281,10 @@ import init, {
 
 // Initialize the WASM module
 await init();
+```
 
+**Example usage:**
+```javascript
 // Perform conversions
 const lengthResult = convert_length_wasm(100, "ft", "m");
 if (lengthResult.success) {

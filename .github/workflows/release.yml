@@ -80,6 +80,72 @@ jobs:
         asset_name: ${{ matrix.asset_name }}
         asset_content_type: application/octet-stream
 
+  build-wasm:
+    name: Build and Upload WASM
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
+
+    - name: Install wasm-pack
+      run: cargo install wasm-pack
+
+    - name: Build WASM packages
+      run: |
+        # Build for web target
+        wasm-pack build --target web --out-dir pkg/web --features wasm
+        
+        # Build for Node.js target
+        wasm-pack build --target nodejs --out-dir pkg/nodejs --features wasm
+        
+        # Build for bundler target
+        wasm-pack build --target bundler --out-dir pkg/bundler --features wasm
+
+    - name: Create WASM archive
+      run: |
+        # Create archives for each target
+        cd pkg
+        tar -czf ../conversions_rs-wasm-web.tar.gz web/
+        tar -czf ../conversions_rs-wasm-nodejs.tar.gz nodejs/
+        tar -czf ../conversions_rs-wasm-bundler.tar.gz bundler/
+        cd ..
+
+    - name: Upload WASM Web Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./conversions_rs-wasm-web.tar.gz
+        asset_name: conversions_rs-wasm-web.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload WASM Node.js Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./conversions_rs-wasm-nodejs.tar.gz
+        asset_name: conversions_rs-wasm-nodejs.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload WASM Bundler Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./conversions_rs-wasm-bundler.tar.gz
+        asset_name: conversions_rs-wasm-bundler.tar.gz
+        asset_content_type: application/gzip
+
   publish-crates:
     name: Publish to crates.io
     runs-on: ubuntu-latest
@@ -93,3 +159,36 @@ jobs:
 
     - name: Publish to crates.io
       run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+  publish-npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: build-wasm
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
+
+    - name: Install wasm-pack
+      run: cargo install wasm-pack
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Build WASM for npm
+      run: |
+        # Build for web target (most common for npm)
+        wasm-pack build --target web --out-dir pkg/web --features wasm
+
+    - name: Publish to npm
+      working-directory: ./pkg/web
+      run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

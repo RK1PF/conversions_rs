@@ -95,3 +95,35 @@ jobs:
       with:
         file: lcov.info
         fail_ci_if_error: true
+
+  wasm:
+    name: WASM Build Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
+
+    - name: Install wasm-pack
+      run: cargo install wasm-pack
+
+    - name: Build WASM (web target)
+      run: wasm-pack build --target web --out-dir pkg/web --features wasm
+
+    - name: Build WASM (nodejs target)
+      run: wasm-pack build --target nodejs --out-dir pkg/nodejs --features wasm
+
+    - name: Build WASM (bundler target)  
+      run: wasm-pack build --target bundler --out-dir pkg/bundler --features wasm
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Test WASM (Node.js)
+      run: node test-wasm.js
