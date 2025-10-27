@@ -5,6 +5,9 @@
 [![Documentation](https://docs.rs/conversions_rs/badge.svg)](https://docs.rs/conversions_rs)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](https://github.com/RK1PF/conversions_rs#license)
 [![Downloads](https://img.shields.io/crates/d/conversions_rs.svg)](https://crates.io/crates/conversions_rs)
+[![npm version](https://img.shields.io/npm/v/conversions_rs.svg)](https://www.npmjs.com/package/conversions_rs)
+[![npm downloads](https://img.shields.io/npm/dm/conversions_rs.svg)](https://www.npmjs.com/package/conversions_rs)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://rk1pf.github.io/conversions_rs/)
 
 A comprehensive command-line unit conversion tool and Rust library with full SI (International System of Units) support.
 
@@ -39,7 +42,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-conversions_rs = "1.2.0"
+conversions_rs = "1.2.1"
 ```
 
 ### For JavaScript/TypeScript (WebAssembly)
@@ -61,16 +64,16 @@ Or download WASM packages directly from the [releases page](https://github.com/R
 
 ### SI Base Units
 - **Length Conversions**: meters, kilometers, centimeters, millimeters, feet, inches, yards, miles
-- **Mass Conversions**: kilograms, grams, pounds, ounces, tons, stones  
+- **Mass Conversions**: kilograms, grams, pounds, ounces, tons (metric), stones  
 - **Temperature Conversions**: Celsius, Fahrenheit, Kelvin
-- **Time Conversions**: seconds, minutes, hours, days, weeks, years, milliseconds, microseconds, nanoseconds
-- **Electric Current Conversions**: amperes, milliamperes, microamperes, nanoamperes, kiloamperes
-- **Amount of Substance Conversions**: moles, millimoles, micromoles, nanomoles, picomoles, kilomoles
-- **Luminous Intensity Conversions**: candela, millicandela, kilocandela, hefnerkerze, international candle
+- **Time Conversions**: seconds, minutes, hours, days, weeks, months, years, milliseconds, microseconds, nanoseconds
+- **Electric Current Conversions**: amperes, milliamperes, microamperes, nanoamperes, kiloamperes, megaamperes
+- **Amount of Substance Conversions**: moles, millimoles, micromoles, nanomoles, kilomoles
+- **Luminous Intensity Conversions**: candela, millicandela, kilocandela
 
 ### SI Derived Units
-- **Volume Conversions**: liters, milliliters, gallons (US/UK), fluid ounces (US/UK), cups, pints, quarts
-- **Area Conversions**: square meters, square centimeters, square kilometers, square feet, square inches, acres, hectares
+- **Volume Conversions**: liters, milliliters, gallons (US/UK), fluid ounces (US/UK), cups, pints, quarts, tablespoons, teaspoons
+- **Area Conversions**: square meters, square centimeters, square kilometers, square feet, square inches, acres, hectares, square yards, square miles
 
 ## Usage
 
@@ -85,8 +88,8 @@ conversions_rs weight 10 kg lb          # 10 kilograms to pounds
 conversions_rs temperature 32 F C       # 32°F to Celsius
 conversions_rs time 3600 s min          # 3600 seconds to minutes
 conversions_rs current 1500 mA A        # 1500 milliamperes to amperes
-conversions_rs amount 0.5 mol mmol      # 0.5 moles to millimoles
-conversions_rs luminosity 2.5 cd mcd    # 2.5 candela to millicandela
+conversions_rs substance 0.5 mol mmol   # 0.5 moles to millimoles
+conversions_rs luminous_intensity 2.5 cd mcd  # 2.5 candela to millicandela
 
 # SI Derived Units  
 conversions_rs volume 1 gal l           # 1 gallon to liters
@@ -95,11 +98,16 @@ conversions_rs area 10000 "m²" ha       # 10000 square meters to hectares
 
 **Get help:**
 ```bash
-conversions_rs --help                   # General help
-conversions_rs length --help            # Help for length conversions
-conversions_rs time --help              # Help for time conversions
-conversions_rs current --help           # Help for current conversions
-# ... and all other conversion types
+conversions_rs --help                        # General help
+conversions_rs length --help                 # Help for length conversions
+conversions_rs weight --help                 # Help for weight conversions
+conversions_rs temperature --help            # Help for temperature conversions
+conversions_rs volume --help                 # Help for volume conversions
+conversions_rs time --help                   # Help for time conversions
+conversions_rs current --help                # Help for current conversions
+conversions_rs substance --help              # Help for substance conversions
+conversions_rs luminous_intensity --help     # Help for luminous intensity conversions
+conversions_rs area --help                   # Help for area conversions
 ```
 
 ### Interactive Mode
@@ -146,9 +154,14 @@ Choose conversion type:
 2. ⚖️  Weight/Mass
 3. 🌡️  Temperature
 4. 🧪 Volume
-5. 🚪 Exit
+5. ⏰ Time
+6. ⚡ Electric Current
+7. 🧬 Amount of Substance
+8. 💡 Luminous Intensity
+9. 📐 Area
+10. 🚪 Exit
 
-Enter your choice (1-5): 1
+Enter your choice (1-10): 1
 
 📏 Length Conversion
 Supported units: m, km, cm, mm, ft, in, yd, mi
@@ -181,20 +194,56 @@ println!("{} lbs", pounds); // 2.20462 lbs
 // Volume conversion
 let milliliters = convert_volume(1.0, "gal", "ml").unwrap();
 println!("{} ml", milliliters); // 3785.41 ml
+
+// Time conversion
+let minutes = convert_time(3600.0, "s", "min").unwrap();
+println!("{} minutes", minutes); // 60.0 minutes
+
+// Electric current conversion
+let amperes = convert_current(1500.0, "mA", "A").unwrap();
+println!("{} A", amperes); // 1.5 A
+
+// Amount of substance conversion
+let millimoles = convert_amount(0.5, "mol", "mmol").unwrap();
+println!("{} mmol", millimoles); // 500.0 mmol
+
+// Luminous intensity conversion
+let millicandela = convert_luminous_intensity(2.5, "cd", "mcd").unwrap();
+println!("{} mcd", millicandela); // 2500.0 mcd
+
+// Area conversion
+let hectares = convert_area(10000.0, "m²", "ha").unwrap();
+println!("{} ha", hectares); // 1.0 ha
 ```
 
 #### Modular API (Type-safe, organized by unit)
 ```rust
-use conversions_rs::conversions::length::*;
+use conversions_rs::{length, weight, temperature, volume, time, current, substance, luminous_intensity, area};
 
 // Using the modular API - more organized and discoverable
-let feet = meters::to_feet(10.0);           // 32.8084 feet
-let inches = feet::to_inches(5.0);          // 60.0 inches
-let cm = inches::to_centimeters(12.0);      // 30.48 cm
-let km = miles::to_kilometers(5.0);         // 8.0467 km
+let feet = length::meters::to_feet(10.0);           // 32.8084 feet
+let inches = length::feet::to_inches(5.0);          // 60.0 inches
+let cm = length::inches::to_centimeters(12.0);      // 30.48 cm
+let km = length::miles::to_kilometers(5.0);         // 8.0467 km
+
+// Weight/Mass conversions
+let pounds = weight::kilograms::to_pounds(10.0);    // 22.0462 pounds
+let grams = weight::pounds::to_grams(1.0);          // 453.592 grams
+
+// Temperature conversions
+let celsius = temperature::fahrenheit::to_celsius(100.0);  // 37.7778 celsius
+let kelvin = temperature::celsius::to_kelvin(25.0);        // 298.15 kelvin
+
+// Volume conversions
+let liters = volume::gallons::to_liters(1.0);       // 3.78541 liters
+let ml = volume::cups::to_milliliters(2.0);         // 473.176 ml
+
+// Time conversions
+let seconds = time::minutes::to_seconds(5.0);       // 300.0 seconds
+let hours = time::seconds::to_hours(7200.0);        // 2.0 hours
 
 // Chain conversions easily
-let result = meters::to_feet(kilometers::to_meters(1.0)); // 1 km to feet
+let result = length::meters::to_feet(length::kilometers::to_meters(1.0)); // 1 km to feet
 ```
 
 #### Legacy Functions (Backward compatibility)
@@ -325,7 +374,7 @@ Open it in a web browser (must be served over HTTP/HTTPS) to try the conversions
 **React/Next.js:**
 ```jsx
 import { useEffect, useState } from 'react';
-import init, { convert_length_wasm } from './pkg/web/conversions_rs.js';
+import init, { convert_length_wasm } from 'conversions_rs';
 
 function Converter() {
     const [wasmReady, setWasmReady] = useState(false);
@@ -404,6 +453,52 @@ For older browsers, consider using a WebAssembly polyfill.
 - `cup`, `cups`, `cup_us` - US Cups
 - `pt`, `pint`, `pints`, `pt_us` - US Pints
 - `qt`, `quart`, `quarts`, `qt_us` - US Quarts
+- `tbsp`, `tablespoon`, `tablespoons` - Tablespoons
+- `tsp`, `teaspoon`, `teaspoons` - Teaspoons
+
+### Time
+- `s`, `second`, `seconds` - Seconds
+- `min`, `minute`, `minutes` - Minutes
+- `h`, `hour`, `hours` - Hours
+- `d`, `day`, `days` - Days
+- `week`, `weeks` - Weeks
+- `month`, `months` - Months
+- `year`, `years` - Years
+- `ms`, `millisecond`, `milliseconds` - Milliseconds
+- `μs`, `microsecond`, `microseconds` - Microseconds
+- `ns`, `nanosecond`, `nanoseconds` - Nanoseconds
+
+### Electric Current
+- `A`, `ampere`, `amperes` - Amperes
+- `mA`, `milliampere`, `milliamperes` - Milliamperes
+- `μA`, `microampere`, `microamperes` - Microamperes
+- `nA`, `nanoampere`, `nanoamperes` - Nanoamperes
+- `kA`, `kiloampere`, `kiloamperes` - Kiloamperes
+- `MA`, `megaampere`, `megaamperes` - Megaamperes
+
+### Amount of Substance
+- `mol`, `mole`, `moles` - Moles
+- `mmol`, `millimole`, `millimoles` - Millimoles
+- `μmol`, `micromole`, `micromoles` - Micromoles
+- `nmol`, `nanomole`, `nanomoles` - Nanomoles
+- `kmol`, `kilomole`, `kilomoles` - Kilomoles
+
+### Luminous Intensity
+- `cd`, `candela` - Candela
+- `mcd`, `millicandela` - Millicandela
+- `kcd`, `kilocandela` - Kilocandela
+
+### Area
+- `m²`, `square_meter`, `square_meters` - Square Meters
+- `km²`, `square_kilometer`, `square_kilometers` - Square Kilometers
+- `cm²`, `square_centimeter`, `square_centimeters` - Square Centimeters
+- `mm²`, `square_millimeter`, `square_millimeters` - Square Millimeters
+- `ha`, `hectare`, `hectares` - Hectares
+- `acre`, `acres` - Acres
+- `ft²`, `square_foot`, `square_feet` - Square Feet
+- `in²`, `square_inch`, `square_inches` - Square Inches
+- `yd²`, `square_yard`, `square_yards` - Square Yards
+- `mi²`, `square_mile`, `square_miles` - Square Miles
 
 ## Building
 
@@ -438,22 +533,6 @@ cargo build --release
 # sudo cp target/release/conversions_rs /usr/local/bin/
 ```
 
-## Library Usage
-
-You can use Conversions RS as a library in your Rust projects:
-
-```rust
-use conversions_rs::conversions::length;
-
-fn main() {
-    let meters = length::feet_to_meters(100.0);
-    println!("100 feet = {} meters", meters);
-    
-    let feet = length::meters_to_feet(30.48);
-    println!("30.48 meters = {} feet", feet);
-}
-```
-
 ## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
@@ -484,44 +563,3 @@ See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes to this proje
 ---
 
 Made with ❤️ by [Raihau GRAFFE](mailto:graffe.raihau@gmail.com)
-
-Then you can use it directly:
-```bash
-converions length 100 ft m
-converions temperature 25 C F
-```
-
-## Testing
-
-The project includes comprehensive unit tests covering:
-- All conversion functions
-- Error handling for invalid units
-- Edge cases and precision
-- Same-unit conversions
-
-Run tests with:
-```bash
-cargo test
-```
-
-## Project Structure
-
-```
-src/
-├── main.rs              # CLI application entry point
-├── lib.rs               # Library entry point and tests
-└── conversions/
-    ├── mod.rs           # Module declarations
-    ├── length.rs        # Length conversion functions
-    ├── weight.rs        # Weight/mass conversion functions
-    ├── temperature.rs   # Temperature conversion functions
-    └── volume.rs        # Volume conversion functions
-```
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Dependencies
-
-- `clap` - Command-line argument parsing for non-interactive mode
